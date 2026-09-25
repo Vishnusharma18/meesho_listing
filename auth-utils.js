@@ -1,4 +1,4 @@
-const ENCRYPTION_KEY = "ecomdost_meesho_2026_secure_key";
+const ENCRYPTION_KEY = "vishnu_meesho_2026_secure_key";
 function encrypt(t) {
   let e = "";
   for (let o = 0; o < t.length; o++)
@@ -21,7 +21,7 @@ function decrypt(t) {
   }
 }
 const getEndpoints = () => {
-  const t = atob("aHR0cHM6Ly9lY29tZG9zdC5jb20="),
+  const t = atob("aHR0cHM6Ly9sb2NhbGhvc3Q="),
     e = atob("aHR0cDovL2xvY2FsaG9zdDozMDAw"),
     o = atob("L2FwaS92ZXJpZnktbGljZW5zZQ==");
   return [t + o, e + o];
@@ -38,9 +38,7 @@ export const Auth = {
     return !(!o || "verified_user" !== o) || (await this.logout(), !1);
   },
   async login() {
-    const t = atob(
-      "aHR0cHM6Ly9lY29tZG9zdC5jb20vc2lnbi1pbj9zb3VyY2U9ZXh0ZW5zaW9u",
-    );
+    const t = atob("aHR0cHM6Ly9sb2NhbGhvc3Qvc2lnbi1pbg==");
     chrome.tabs.create({ url: t });
   },
   logout: async () => (
@@ -80,7 +78,7 @@ export const Auth = {
           continue;
         }
       } catch (t) {}
-    return { success: !1, message: "Please log in to Ecomdost.com" };
+    return { success: !1, message: "Please log in" };
   },
   async revalidateSession() {
     return (

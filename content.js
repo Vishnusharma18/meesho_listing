@@ -565,7 +565,17 @@ async function autofillProfile(e) {
         "function" == typeof getStableSelector ? getStableSelector(t) : null;
       if (!o) return void showToast("Error: Selector util not loaded", !0);
       const n = ("value" in t ? t.value : t.innerText || "").toString();
-      const i = prompt(`Save field: ${o}\nValue:`, n);
+      const fieldId =
+        (t.id || "").toLowerCase() ||
+        ((o.match(/id=["']([^"']+)["']/) || o.match(/#([a-zA-Z0-9_-]+)/) ||
+          [])[1] || "").toLowerCase();
+      const isSku =
+        fieldId === "supplier_product_id" ||
+        /supplier_product_id|sku/i.test(o);
+      const promptLabel = isSku
+        ? `Save SKU (auto +1 each Autofill):\n${o}\nValue:`
+        : `Save field: ${o}\nValue:`;
+      const i = prompt(promptLabel, n);
       null !== i &&
         chrome.runtime.sendMessage(
           {
@@ -577,6 +587,7 @@ async function autofillProfile(e) {
                 type:
                   t.type || t.getAttribute("role") || t.tagName.toLowerCase(),
                 value: i,
+                autoIncrement: isSku,
               },
             },
           },
@@ -584,7 +595,11 @@ async function autofillProfile(e) {
             if (chrome.runtime.lastError)
               return void showToast("Error Saving Field", !0);
             showToast(
-              e && e.success ? "Field Saved!" : "Error Saving",
+              e && e.success
+                ? isSku
+                  ? "SKU Saved! (auto +1)"
+                  : "Field Saved!"
+                : "Error Saving",
               !(e && e.success),
             );
           },

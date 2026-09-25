@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Ecomwithnabeel Smart Autofill",
-  "version": "2.1",
-  "description": "Unlimited smart autofill for faster Meesho catalog uploads. Built by Ecomwithnabeel.",
+  "name": "Vishnu Smart Autofill",
+  "version": "2.3",
+  "description": "Unlimited smart autofill with auto-increment SKU for faster Meesho catalog uploads. Built by Vishnu.",
   "permissions": [
     "storage",
     "activeTab",

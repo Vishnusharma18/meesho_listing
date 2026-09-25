@@ -1,3 +1,70 @@
+/** Detect Meesho / generic SKU fields that should auto-increment */
+function isSkuField(field) {
+  if (!field) return false;
+  if (field.autoIncrement === true) return true;
+  const sel = String(field.selector || "").toLowerCase();
+  const type = String(field.type || "").toLowerCase();
+  return (
+    sel.includes("supplier_product_id") ||
+    sel.includes("sku") ||
+    type.includes("sku")
+  );
+}
+
+/**
+ * Bump trailing digits, keep padding.
+ * xx-yy-xx01 → xx-yy-xx02 | ITEM-0099 → ITEM-0100
+ */
+function incrementSkuValue(value) {
+  const str = String(value ?? "").trim();
+  if (!str) return null;
+  const match = str.match(/^(.*?)(\d+)$/);
+  if (!match) return null;
+  const prefix = match[1];
+  const digits = match[2];
+  const next = String(parseInt(digits, 10) + 1).padStart(digits.length, "0");
+  return prefix + next;
+}
+
+/**
+ * Build fill snapshot + advance SKU values in the saved profile for next run.
+ * Returns { fillData, skuUsed, skuNext } or null if no change needed beyond clone.
+ */
+function prepareAutofillWithSkuBump(profile) {
+  const fillFields = [];
+  let skuUsed = null;
+  let skuNext = null;
+
+  for (const field of profile.fields || []) {
+    const copy = { ...field };
+    fillFields.push(copy);
+
+    if (!isSkuField(field)) continue;
+
+    const current = String(field.value ?? "").trim();
+    if (!current) continue;
+
+    const next = incrementSkuValue(current);
+    if (!next) continue;
+
+    // This run fills current; profile stores next for the following run
+    copy.value = current;
+    field.value = next;
+    field.autoIncrement = true;
+
+    if (!skuUsed) {
+      skuUsed = current;
+      skuNext = next;
+    }
+  }
+
+  return {
+    fillData: { ...profile, fields: fillFields },
+    skuUsed,
+    skuNext,
+  };
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   // Clear any leftover trial / license locks from older builds
   await chrome.storage.local.remove([
@@ -10,6 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   ]);
 
   const profileSelect = document.getElementById("profileSelect");
+  const statusMessage = document.getElementById("statusMessage");
 
   const btnNew = document.getElementById("btnNewProfile");
   const btnEdit = document.getElementById("btnEditProfile");
@@ -187,6 +255,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    const { fillData, skuUsed, skuNext } = prepareAutofillWithSkuBump(data);
+
+    // Persist bumped SKU so the next Autofill uses +1
+    await saveProfiles();
+
     const [tab] = await chrome.tabs.query({
       active: true,
       currentWindow: true,
@@ -194,8 +267,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     chrome.tabs.sendMessage(tab.id, {
       action: "AUTOFILL",
-      data: data,
+      data: fillData,
     });
+
+    if (statusMessage) {
+      statusMessage.textContent = skuUsed
+        ? `SKU: ${skuUsed} → next ${skuNext}`
+        : "Autofill started";
+    }
   };
 
   /* EXPORT */
@@ -215,7 +294,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const a = document.createElement("a");
 
     a.href = url;
-    a.download = "ecommann_profiles_" + Date.now() + ".json";
+    a.download = "vishnu_profiles_" + Date.now() + ".json";
 
     document.body.appendChild(a);
 
