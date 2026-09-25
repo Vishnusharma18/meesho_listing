@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Ecomwithnabeel Smart Autofill</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+  </head>
+  <body>
+    <div class="glass-card">
+      <div class="header">
+        <div class="brand-row">
+          <img class="brand-logo" src="icons/icon128.png" alt="Ecomwithnabeel">
+          <div class="brand-copy">
+            <h1>ECOM<span>WITH</span>NABEEL</h1>
+            <div class="badge">SMART AUTOFILL</div>
+          </div>
+        </div>
+        <p class="tagline">Save Time • Upload Smarter • Grow Faster</p>
+      </div>
+
+      <div class="section">
+        <label>SELECT PROFILE</label>
+        <select id="profileSelect">
+          <option disabled selected>-- Choose --</option>
+        </select>
+        <div class="profile-buttons">
+          <button id="btnNewProfile">➕ NEW</button>
+          <button id="btnEditProfile">✏ EDIT</button>
+          <button id="btnDeleteProfile">🗑 DEL</button>
+        </div>
+      </div>
+
+      <div class="section action-section">
+        <button class="big-btn capture-btn" id="btnCapture">◎ &nbsp; CAPTURE
+          FIELDS <b>›</b></button>
+        <button class="big-btn autofill-btn" id="btnAutofill">⚡ &nbsp; AUTOFILL
+          DATA <b>›</b></button>
+      </div>
+
+      <div class="section backup-section">
+        <label>PROFILE BACKUP</label>
+        <div class="backup-grid">
+          <button id="btnExport">⬇ EXPORT PROFILE</button>
+          <button id="btnImport">⬆ IMPORT PROFILE</button>
+        </div>
+        <input type="file" id="importFile" accept=".json" style="display:none">
+      </div>
+
+      <div id="statusMessage"></div>
+
+      <div class="ready-bar">
+        <span class="ready-dot"></span> SYSTEM READY <small
+          class="trial-count">UNLIMITED</small>
+      </div>
+
+      <footer>
+        <div class="footer-brand"><img src="icons/icon128.png" alt> <span>Built
+            by <strong>ECOMWITHNABEEL</strong></span></div>
+        <div class="contact-line">Tools ke liye contact karein: <a
+            class="ig-link"
+            href="https://www.instagram.com/ecomwithnabeel_?igsh=ZWo4cmo5NjJ4OWZs"
+            target="_blank">@ecomwithnabeel_</a></div>
+      </footer>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
