@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Vishnu">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0b2e"/>
+      <stop offset="100%" stop-color="#05070c"/>
+    </linearGradient>
+    <linearGradient id="vGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4fc8"/>
+      <stop offset="50%" stop-color="#8d5cff"/>
+      <stop offset="100%" stop-color="#23d8ff"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff35b9"/>
+      <stop offset="100%" stop-color="#29d8ff"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="62" fill="url(#bg)"/>
+  <circle cx="64" cy="64" r="58" fill="none" stroke="url(#ring)" stroke-width="4"/>
+  <path d="M34 36 L64 98 L94 36 L80 36 L64 72 L48 36 Z" fill="url(#vGrad)"/>
+</svg>
